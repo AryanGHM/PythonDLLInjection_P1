@@ -68,9 +68,8 @@ class DLLInjector:
         h_loadlib = self.kernel32.GetProcAddress(self.kernel32._handle, "LoadLibraryA".encode('ansi')) #kernel32 parses stiring with 'ansi' encoding but python3 uses unicode as default encoding.
 
         if h_loadlib == 0:
-            #Failed to retrieve LoadLibraryA address so return error code
-            errcode = self.kernel32.GetLastError()
-            return (None, "Could not retrieve \"LoadLibraryA\"'s address, ErrCode: {}".format(str(errcode)))
+            #Failed to retrieve LoadLibraryA address.
+            raise self.CouldNotGetHandle("Could not retrieve \"LoadLibraryA\"'s address", self.kernel32.GetLastError())
 
         #Inject the dll
         #Create a remote thread with h_loadlib addr as entrypoint and
